@@ -92,6 +92,11 @@ function configure_portage() {
 	touch_or_die 0644 "/etc/portage/package.keywords/zz-autounmask"
 	touch_or_die 0644 "/etc/portage/package.license"
 
+	# Persist the same parallelism used during the install itself (see dispatch_chroot.sh)
+	# so the installed system also builds with sensible defaults, not just this session.
+	echo "MAKEOPTS=\"-j$NPROC\"" >> /etc/portage/make.conf \
+		|| die "Could not modify /etc/portage/make.conf"
+
 	if [[ $SELECT_MIRRORS == "true" ]]; then
 		einfo "Temporarily installing mirrorselect"
 		try emerge --verbose --oneshot app-portage/mirrorselect

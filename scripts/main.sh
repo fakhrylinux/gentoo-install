@@ -249,7 +249,7 @@ function install_kernel_efi() {
 	if mdadm --detail --scan "$efipartdev" | grep -qE "^ARRAY $efipartdev " && [[ "$efipartdev" =~ ^/dev/md[0-9]+$ ]]; then
 		# RAID 1 case: Create EFI boot entries for each RAID member
 		local raid_members
-		raid_members=($(mdadm --detail "$efipartdev" | sed -n 's|.*active sync[^/]*\(/dev/[^ ]*\).*|\1|p' | sort))
+		mapfile -t raid_members < <(mdadm --detail "$efipartdev" | sed -n 's|.*active sync[^/]*\(/dev/[^ ]*\).*|\1|p' | sort)
 
 		if [[ ${#raid_members[@]} -eq 0 ]]; then
 			die "RAID setup detected, but no valid member disks found for $efipartdev"

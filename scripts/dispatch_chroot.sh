@@ -1,11 +1,14 @@
 #!/bin/bash
 set -uo pipefail
 
+export DEBUGINFOD_URLS="http://foo.mynet.local/debuginfo https://debuginfod.elfutils.org/" 
+export DEBUGINFOD_IMA_CERT_PATH="/etc/certs"
+
 [[ $EXECUTED_IN_CHROOT != "true" ]] \
 	&& { echo "This script must not be executed directly!" >&2; exit 1; }
 
-: "${DEBUGINFOD_URLS:=}"
-: "${DEBUGINFOD_IMA_CERT_PATH:=}"
+# : "${DEBUGINFOD_URLS:=}"
+# : "${DEBUGINFOD_IMA_CERT_PATH:=}"
 
 # Source the systems profile
 source /etc/profile
